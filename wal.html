@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phonebook</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <style>
+    /* Custom CSS */
+    .contact-table {
+      border: 1px solid #ddd;
+      border-radius: 0.25rem;
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-table thead th {
+      border-right: 1px solid #ddd;
+      background-color: #0d4076;
+      color: #fff;
+      padding: 10px;
+    }
+
+    .contact-table tbody td {
+      border-right: 1px solid #ddd;
+      padding: 10px;
+    }
+
+    .contact-table tbody tr {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .contact-table thead th:last-child,
+    .contact-table tbody td:last-child {
+      border-right: none;
+    }
+
+    .form-control {
+      margin: 2%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">Phonebook</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <form id="contactForm">
+            <input type="hidden" id="contactId">
+            <div class="form-group" style = "width: 300px;">
+              <label for="firstName">First Name:</label>
+              <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
+            </div>
+            <div class="form-group" style = "width: 300px;>
+              <label for="lastName">Last Name:</label>
+              <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+            </div>
+            <div class="form-group" style = "width: 300px;>
+              <label for="middleName">Middle Name:</label>
+              <input type="text" class="form-control" id="middleName" placeholder="Enter middle name">
+            </div>
+            <div class="form-group" style = "width: 300px;>
+              <label for="address">Address:</label>
+              <input type="text" class="form-control" id="address" placeholder="Enter address">
+            </div>
+            <div class="form-group" style = "width: 300px;>
+              <label for="phoneNumber">Phone Number:</label>
+              <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+            </div>
+            <div class="form-group" style = "width: 300px;>
+              <label for="email">Email:</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter email">
+            </div>
+            <div class="form-group" style = "width: 300px;>
+              <label for="notes">Notes:</label>
+              <textarea class="form-control" id="notes" placeholder="Enter notes"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <h2 class="text-center">Contact List</h2>
+        <input type="text" class="form-control" id="searchInput" placeholder="Search">
+        <table class="table contact-table">
+          <thead>
+            <tr>
+              <th>Last Name</th>
+              <th>First Name</th>
+              <th>Middle Name</th>
+              <th>Address</th>
+              <th>Phone Number</th>
+              <th>Email</th>
+              <th>Notes</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="contactTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Define the contacts array
+      var contacts = [];
+
+      // Function to render the contacts in the table body
+      function renderContactRows(filteredContacts) {
+        var contactTableBody = $('#contactTableBody');
+        contactTableBody.empty(); // Clear the previous contact rows
+
+        // Iterate over the filtered contacts and add them to the table body
+        for (var i = 0; i < filteredContacts.length; i++) {
+          var contact = filteredContacts[i];
+          var row = '<tr>' +
+                      '<td>' + contact.lastName + '</td>' +
+                      '<td>' + contact.firstName + '</td>' +
+                      '<td>' + contact.middleName + '</td>' +
+                      '<td>' + contact.address + '</td>' +
+                      '<td>' + contact.phoneNumber + '</td>' +
+                      '<td>' + contact.email + '</td>' +
+                      '<td>' + contact.notes + '</td>' +
+                      '<td><button class="btn btn-primary btn-sm edit-btn">Edit</button></td>' +
+                      '<td><button class="btn btn-danger btn-sm delete-btn">Delete</button></td>' +
+                    '</tr>';
+          contactTableBody.append(row);
+        }
+      }
+
+      // Function to filter contacts based on search input
+      function filterContacts(searchTerm) {
+        var filteredContacts = [];
+
+        for (var i = 0; i < contacts.length; i++) {
+          var contact = contacts[i];
+          if (
+            contact.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.middleName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.phoneNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.notes.toLowerCase().includes(searchTerm.toLowerCase())
+          ) {
+            filteredContacts.push(contact);
+          }
+        }
+
+        return filteredContacts;
+      }
+
+      // Event listener for search input
+      $('#searchInput').on('input', function() {
+        var searchTerm = $(this).val();
+        var filteredContacts = filterContacts(searchTerm);
+        renderContactRows(filteredContacts);
+      });
+
+      // Initial rendering of contacts
+      renderContactRows(contacts);
+    });
+  </script>
+</body>
+</html>
