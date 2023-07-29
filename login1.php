@@ -27,7 +27,6 @@
     }
     ob_end_flush(); // Flush output buffer
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,6 +56,7 @@
     <link rel="stylesheet" href="assets/css/templatemo-chain-app-dev.css">
     <link rel="stylesheet" href="assets/css/animated.css">
     <link rel="stylesheet" href="assets/css/owl.css">
+    <link rel="stylesheet" href="assets/css/main.css">
 
   </head>
 
@@ -92,7 +92,7 @@
               <li class="scroll-to-section"><a href="#about">About</a></li>
               <li class="scroll-to-section"><a href="phonebook.php">Phonebook</a></li>
               <li class="scroll-to-section"><a href="#contacts">Contacts</a></li>
-              <li class="scroll-to-section"><a href="login1.php">Login</a></li>
+              <li class="scroll-to-section"><a href="Login.php">Login</a></li>
             </ul>        
             <a class='menu-trigger'>
                 <span>Menu</span>
@@ -199,13 +199,23 @@
             <div class="col-lg-6 align-self-center">
               <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
                 <div class="row">
-                  <div class="col-lg-12">
-                    <h2>Nelia Phonebook</h2>
-                    <p>NellyPhoneBook is a user-friendly digital phone directory that simplifies contact management. It offers a centralized platform to store, organize, and access all your contacts securely. With intuitive features and mobile integration, NellyPhoneBook enhances your communication experience while prioritizing privacy..</p>
-                  </div>
-                  <div class="col-lg-12">
+   <form class="forms" method="post" name="login">
+        <h1 class="login-title">Login</h1>
+        <input type="text" class="login-input" name="username" placeholder="Username" autofocus="true"/>
+        <input type="password" class="login-input" name="password" placeholder="Password"/>
+        <input type="submit" value="Login" name="submit" class="buttons"/>
+  <p class="message">Doesn't Have Account?</p>
+        <a href="registration.php" class="buttons">REGISTER</a>
+    </form>
+    
+        <?php if (isset($errorMessage)): ?>
+        <div class='form1'>
+            <h3><?php echo $errorMessage; ?></h3><br/>
+            <p class='link'>Please double check your password / Check Case Sensitivity</p>
+        </div>
+    <?php endif; ?>
                     <div class="white-button scroll-to-section">
-                      <a href="phonebook.php">Create Phonebook Now! <i class="fab fa-google-play"></i></a>
+
                     </div>
                   </div>
                 </div>
@@ -213,7 +223,6 @@
             </div>
             <div class="col-lg-6">
               <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
-                <img src="https://scontent.fmnl34-1.fna.fbcdn.net/v/t1.15752-9/361303069_1034444781325607_5253989390287783859_n.png?_nc_cat=109&cb=99be929b-59f725be&ccb=1-7&_nc_sid=ae9488&_nc_eui2=AeGEAdVO__dwq5iPYFKVkDzgrZ7_W35PJ9Stnv9bfk8n1KOdxbQAH-xIUsGnd5AOHr_L1Yh0xv4v1okEzGtGP--T&_nc_ohc=tmX5Vz-jqMwAX83hf1W&_nc_ht=scontent.fmnl34-1.fna&oh=03_AdSjsMqoAn8UEt_dp1ejgPdnuSZ2OtbuC4n811utLDZrbA&oe=64D8A909" alt="">
               </div>
             </div>
           </div>
@@ -223,57 +232,7 @@
   </div>
 
 
-  <div id="about" class="about-us section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 align-self-center">
-          <div class="section-heading">
-            <h4>About Me</h4>
-            <img src="assets/images/heading-line-dec.png" alt="">
-            <p>NellyPhoneBook is a user-friendly digital phone directory that simplifies contact management. It offers a centralized platform to store, organize, and access all your contacts securely. With intuitive features and mobile integration, NellyPhoneBook enhances your communication experience while prioritizing privacy.</p>
-          </div>
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Responsive</a></h4>
-
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Smooth Delete</a></h4>
-
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Delete Feature</a></h4>
-
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Fast Loading</a></h4>
-
-              </div>
-            </div>
-            <div class="col-lg-12">
-              <div class="gradient-button">
-                <a href="phonebook.php">Create Now!</a>
-              </div>
-    
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="right-image">
-            <img src="assets/images/about-right-dec.png" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
+ 
  
   <footer id="newsletter">
     <div class="container">
@@ -334,3 +293,34 @@
   <script src="assets/js/custom.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

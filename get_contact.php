@@ -3,7 +3,7 @@
 $contactId = $_GET['id'];
 
 // Connect to the database
-$conn = mysqli_connect('localhost', 'root', '', 'login_register');
+    $con = mysqli_connect("localhost","id21003560_nelia","Brahman@2020","id21003560_localhost");
 
 // Check connection
 if (mysqli_connect_errno()) {
@@ -12,7 +12,7 @@ if (mysqli_connect_errno()) {
 
 // Fetch the contact with the specified ID
 $sql = "SELECT * FROM contacts WHERE id = " . (int)$contactId;
-$result = mysqli_query($conn, $sql);
+$result = mysqli_query($con, $sql);
 
 if ($row = mysqli_fetch_assoc($result)) {
   // Convert the contact data to JSON and send the response
@@ -23,5 +23,5 @@ if ($row = mysqli_fetch_assoc($result)) {
 }
 
 // Close the database connection
-mysqli_close($conn);
+mysqli_close($con);
 ?>

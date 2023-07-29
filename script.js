@@ -81,60 +81,56 @@ function saveContact() {
       xhr.send();
     }
   
-    // Function to display contacts
-    function displayContacts(contacts) {
-      // Sort contacts by last name and first name
-      contacts.sort(function(a, b) {
-        const nameA = a.last_name + a.first_name;
-        const nameB = b.last_name + b.first_name;
-        return nameA.localeCompare(nameB);
-      });
-  
-      contactList.innerHTML = '';
-  
-      // Create table structure
-      const table = document.createElement('table');
-      table.classList.add('contact-table');
-  
-      // Create table header
-      const tableHeader = document.createElement('thead');
-      const headerRow = document.createElement('tr');
-      headerRow.innerHTML = `
-        <th>Last Name</th>
-        <th>First Name</th>
-        <th>Middle Name</th>
-        <th>Address</th>
-        <th>Phone Number</th>
-        <th>Email</th>
-        <th>Notes</th>
-        <th></th>
-        <th></th>
-      `;
-      tableHeader.appendChild(headerRow);
-      table.appendChild(tableHeader);
-  
-      // Create table body
-      const tableBody = document.createElement('tbody');
-      for (let i = 0; i < contacts.length; i++) {
-        const contact = contacts[i];
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${contact.last_name}</td>
-          <td>${contact.first_name}</td>
-          <td>${contact.middle_name}</td>
-          <td>${contact.address}</td>
-          <td>${contact.phone_number}</td>
-          <td>${contact.email}</td>
-          <td>${contact.notes}</td>
-          <td><button onclick="editContact(${contact.id})">Edit</button></td>
-          <td><button onclick="deleteContact(${contact.id})">Delete</button></td>
-        `;
-        tableBody.appendChild(row);
-      }
-      table.appendChild(tableBody);
-  
-      contactList.appendChild(table);
+// Function to fetch contacts
+function fetchContacts() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'get_contacts.php', true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      const contacts = JSON.parse(xhr.responseText);
+      displayContacts(contacts);
     }
+  };
+  xhr.send();
+}
+
+// Function to display contacts
+function displayContacts(contacts) {
+  contactList.innerHTML = '';
+
+  if (contacts.length === 0) {
+    document.getElementById('noContactsFound').style.display = 'block';
+    return;
+  } else {
+    document.getElementById('noContactsFound').style.display = 'none';
+  }
+
+  for (let i = 0; i < contacts.length; i++) {
+    const contact = contacts[i];
+    const card = document.createElement('div');
+    card.classList.add('contact-card');
+    card.innerHTML = `
+      <div class="card-body">
+        <p><strong>Name:</strong> ${contact.last_name}, ${contact.first_name} ${contact.middle_name}</p>
+        <p><strong>Address:</strong> ${contact.address}</p>
+        <p><strong>Phone Number:</strong> ${contact.phone_number}</p>
+        <p><strong>Email:</strong> ${contact.email}</p>
+        <p><strong>Notes:</strong> ${contact.notes}</p>
+        <button onclick="editContact(${contact.id})">Edit</button>
+        <button onclick="deleteContact(${contact.id})">Delete</button>
+      </div>
+    `;
+    contactList.appendChild(card);
+  }
+}
+
+
+// Event listener for window.onload
+window.addEventListener('load', function() {
+  fetchContacts();
+});
+
+
   
     // Function to edit a contact
     window.editContact = function(contactId) {
@@ -187,30 +183,40 @@ function saveContact() {
       document.getElementById('notes').value = '';
     }
   
-    // Function to search contacts
-    function searchContacts() {
-      const searchTerm = searchInput.value.toLowerCase();
-      const contactItems = contactList.getElementsByTagName('tr');
-  
-      for (let i = 0; i < contactItems.length; i++) {
-        const contactItem = contactItems[i];
-        const contactFields = contactItem.getElementsByTagName('td');
-        let foundMatch = false;
-  
-        for (let j = 0; j < contactFields.length; j++) {
-          const fieldValue = contactFields[j].innerText.toLowerCase();
-          if (fieldValue.includes(searchTerm)) {
-            foundMatch = true;
-            break;
-          }
-        }
-  
-        if (foundMatch) {
-          contactItem.style.display = 'table-row';
-        } else {
-          contactItem.style.display = 'none';
-        }
+// Function to search contacts
+function searchContacts() {
+  const searchTerm = searchInput.value.toLowerCase();
+  const contactCards = contactList.getElementsByClassName('contact-card');
+
+  let contactsFound = 0;
+
+  for (let i = 0; i < contactCards.length; i++) {
+    const contactCard = contactCards[i];
+    const contactDetails = contactCard.getElementsByClassName('card-body')[0];
+    const contactFields = contactDetails.getElementsByTagName('p');
+    let foundMatch = false;
+
+    for (let j = 0; j < contactFields.length; j++) {
+      const fieldValue = contactFields[j].innerText.toLowerCase();
+      if (fieldValue.includes(searchTerm)) {
+        foundMatch = true;
+        break;
       }
     }
+
+    if (foundMatch) {
+      contactCard.style.display = 'block';
+      contactsFound++;
+    } else {
+      contactCard.style.display = 'none';
+    }
+  }
+
+  if (contactsFound === 0) {
+    document.getElementById('noContactsFound').style.display = 'block';
+  } else {
+    document.getElementById('noContactsFound').style.display = 'none';
+  }
+}
+
   };
-  

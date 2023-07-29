@@ -1,32 +1,123 @@
 <?php
-    // Ensure that no output is sent before session_start()
-    ob_start();
-    session_start();
-    require('db.php');
-
-    // When form submitted, check and create user session.
-    if (isset($_POST['username'])) {
-        $username = stripslashes($_REQUEST['username']);
-        $username = mysqli_real_escape_string($con, $username);
-        $password = stripslashes($_REQUEST['password']);
-        $password = mysqli_real_escape_string($con, $password);
-
-        // Check if user exists in the database
-        $query = "SELECT * FROM `users` WHERE username='$username' AND password='" . md5($password) . "'";
-        $result = mysqli_query($con, $query) or die(mysqli_error($con));
-        $rows = mysqli_num_rows($result);
-
-        if ($rows == 1) {
-            $_SESSION['username'] = $username;
-            // Redirect to user dashboard page
-            header("Location: index.php");
-            exit();
-        } else {
-            $errorMessage = "Incorrect Username/Password.";
-        }
-    }
-    ob_end_flush(); // Flush output buffer
+//include auth_session.php file on all user panel pages
+include("auth_session.php");
 ?>
+<style>
+  /* Custom CSS */
+  .contact-card {
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+  }
+
+  .contact-card .card-body {
+    padding: 0;
+  }
+
+  .contact-card .card-title {
+    padding: 10px;
+    margin-bottom: 0;
+    background-color: #0d4076;
+    color: #fff;
+  }
+
+  .contact-card p {
+    margin: 0;
+    padding: 10px;
+  }
+
+  .contact-card .btn {
+    margin: 10px;
+  }
+
+  /* Custom CSS for layout */
+  .container {
+    text-align: center;
+    margin-top: 30px;
+    background-color: #262626;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .form-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    flex: 0 0 30%;
+    margin-right: 10px;
+    text-align: right;
+  }
+
+  .row {
+    justify-content: center;
+  }
+
+  .col-md-6 {
+    max-width: 500px;
+  }
+
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  h2 {
+    margin-top: 30px;
+  }
+
+  #searchInput {
+    margin-bottom: 10px;
+  }
+
+  #contactList {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+
+  #contactList .contact-card:last-child {
+    margin-bottom: 0;
+  }
+
+  #noContactsFound {
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .offset-md-2 {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  /* Night Mode */
+  body {
+    background-color: #000;
+    color: #fff;
+  }
+
+.container {
+    background-color: #00000021;
+}
+
+  .form-group label {
+    color: #fff;
+  }
+
+  .contact-card {
+    background-color: #1c1c1c;
+  }
+
+  .contact-card .card-title {
+    background-color: #0d4076;
+  }
+</style>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,6 +148,7 @@
     <link rel="stylesheet" href="assets/css/templatemo-chain-app-dev.css">
     <link rel="stylesheet" href="assets/css/animated.css">
     <link rel="stylesheet" href="assets/css/owl.css">
+    <link rel="stylesheet" href="assets/css/main.css">
 
   </head>
 
@@ -92,7 +184,7 @@
               <li class="scroll-to-section"><a href="#about">About</a></li>
               <li class="scroll-to-section"><a href="phonebook.php">Phonebook</a></li>
               <li class="scroll-to-section"><a href="#contacts">Contacts</a></li>
-              <li class="scroll-to-section"><a href="login1.php">Login</a></li>
+              <li class="scroll-to-section"><a href="logout.php">Logout</a></li>
             </ul>        
             <a class='menu-trigger'>
                 <span>Menu</span>
@@ -190,90 +282,95 @@
         </div>
     </section>
 </div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-  <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="row">
-            <div class="col-lg-6 align-self-center">
-              <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <h2>Nelia Phonebook</h2>
-                    <p>NellyPhoneBook is a user-friendly digital phone directory that simplifies contact management. It offers a centralized platform to store, organize, and access all your contacts securely. With intuitive features and mobile integration, NellyPhoneBook enhances your communication experience while prioritizing privacy..</p>
-                  </div>
-                  <div class="col-lg-12">
-                    <div class="white-button scroll-to-section">
-                      <a href="phonebook.php">Create Phonebook Now! <i class="fab fa-google-play"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
-                <img src="https://scontent.fmnl34-1.fna.fbcdn.net/v/t1.15752-9/361303069_1034444781325607_5253989390287783859_n.png?_nc_cat=109&cb=99be929b-59f725be&ccb=1-7&_nc_sid=ae9488&_nc_eui2=AeGEAdVO__dwq5iPYFKVkDzgrZ7_W35PJ9Stnv9bfk8n1KOdxbQAH-xIUsGnd5AOHr_L1Yh0xv4v1okEzGtGP--T&_nc_ohc=tmX5Vz-jqMwAX83hf1W&_nc_ht=scontent.fmnl34-1.fna&oh=03_AdSjsMqoAn8UEt_dp1ejgPdnuSZ2OtbuC4n811utLDZrbA&oe=64D8A909" alt="">
-              </div>
-            </div>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="container">
+    <h1>Phonebook</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <form id="contactForm">
+          <input type="hidden" id="contactId">
+          <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
           </div>
-        </div>
+          <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+          </div>
+          <div class="form-group">
+            <label for="middleName">Middle Name:</label>
+            <input type="text" class="form-control" id="middleName" placeholder="Enter middle name">
+          </div>
+          <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" class="form-control" id="address" placeholder="Enter address">
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label for="notes">Notes:</label>
+            <textarea class="form-control" id="notes" placeholder="Enter notes"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+    </div>
+    <h2>Contact List</h2>
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search">
+        <ul id="contactList"></ul>
+        <p id="noContactsFound" style="display: none; color: #fff;">No contacts found.</p>
       </div>
     </div>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
 
-  <div id="about" class="about-us section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 align-self-center">
-          <div class="section-heading">
-            <h4>About Me</h4>
-            <img src="assets/images/heading-line-dec.png" alt="">
-            <p>NellyPhoneBook is a user-friendly digital phone directory that simplifies contact management. It offers a centralized platform to store, organize, and access all your contacts securely. With intuitive features and mobile integration, NellyPhoneBook enhances your communication experience while prioritizing privacy.</p>
-          </div>
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Responsive</a></h4>
 
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Smooth Delete</a></h4>
 
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Delete Feature</a></h4>
 
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Fast Loading</a></h4>
 
-              </div>
-            </div>
-            <div class="col-lg-12">
-              <div class="gradient-button">
-                <a href="phonebook.php">Create Now!</a>
-              </div>
-    
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="right-image">
-            <img src="assets/images/about-right-dec.png" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
  
   <footer id="newsletter">
     <div class="container">
@@ -334,3 +431,55 @@
   <script src="assets/js/custom.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

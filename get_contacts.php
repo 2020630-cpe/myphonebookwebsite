@@ -1,6 +1,6 @@
 <?php
 // Connect to the database
-$conn = mysqli_connect('localhost', 'root', '', 'login_register');
+    $con = mysqli_connect("localhost","id21003560_nelia","Brahman@2020","id21003560_localhost");
 
 // Check connection
 if (mysqli_connect_errno()) {
@@ -9,7 +9,7 @@ if (mysqli_connect_errno()) {
 
 // Fetch all contacts
 $sql = "SELECT * FROM contacts";
-$result = mysqli_query($conn, $sql);
+$result = mysqli_query($con, $sql);
 
 $contacts = array();
 while ($row = mysqli_fetch_assoc($result)) {
@@ -21,5 +21,5 @@ header('Content-Type: application/json');
 echo json_encode($contacts);
 
 // Close the database connection
-mysqli_close($conn);
+mysqli_close($con);
 ?>

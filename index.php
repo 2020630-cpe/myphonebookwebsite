@@ -1,33 +1,7 @@
 <?php
-    // Ensure that no output is sent before session_start()
-    ob_start();
-    session_start();
-    require('db.php');
-
-    // When form submitted, check and create user session.
-    if (isset($_POST['username'])) {
-        $username = stripslashes($_REQUEST['username']);
-        $username = mysqli_real_escape_string($con, $username);
-        $password = stripslashes($_REQUEST['password']);
-        $password = mysqli_real_escape_string($con, $password);
-
-        // Check if user exists in the database
-        $query = "SELECT * FROM `users` WHERE username='$username' AND password='" . md5($password) . "'";
-        $result = mysqli_query($con, $query) or die(mysqli_error($con));
-        $rows = mysqli_num_rows($result);
-
-        if ($rows == 1) {
-            $_SESSION['username'] = $username;
-            // Redirect to user dashboard page
-            header("Location: index.php");
-            exit();
-        } else {
-            $errorMessage = "Incorrect Username/Password.";
-        }
-    }
-    ob_end_flush(); // Flush output buffer
+//include auth_session.php file on all user panel pages
+include("auth_session.php");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -92,7 +66,7 @@
               <li class="scroll-to-section"><a href="#about">About</a></li>
               <li class="scroll-to-section"><a href="phonebook.php">Phonebook</a></li>
               <li class="scroll-to-section"><a href="#contacts">Contacts</a></li>
-              <li class="scroll-to-section"><a href="login1.php">Login</a></li>
+              <li class="scroll-to-section"><a href="logout.php">Logout</a></li>
             </ul>        
             <a class='menu-trigger'>
                 <span>Menu</span>
@@ -213,7 +187,7 @@
             </div>
             <div class="col-lg-6">
               <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
-                <img src="https://scontent.fmnl34-1.fna.fbcdn.net/v/t1.15752-9/361303069_1034444781325607_5253989390287783859_n.png?_nc_cat=109&cb=99be929b-59f725be&ccb=1-7&_nc_sid=ae9488&_nc_eui2=AeGEAdVO__dwq5iPYFKVkDzgrZ7_W35PJ9Stnv9bfk8n1KOdxbQAH-xIUsGnd5AOHr_L1Yh0xv4v1okEzGtGP--T&_nc_ohc=tmX5Vz-jqMwAX83hf1W&_nc_ht=scontent.fmnl34-1.fna&oh=03_AdSjsMqoAn8UEt_dp1ejgPdnuSZ2OtbuC4n811utLDZrbA&oe=64D8A909" alt="">
+                <img src=https://scontent.fmnl34-1.fna.fbcdn.net/v/t1.15752-9/361303069_1034444781325607_5253989390287783859_n.png?_nc_cat=109&cb=99be929b-59f725be&ccb=1-7&_nc_sid=ae9488&_nc_eui2=AeGEAdVO__dwq5iPYFKVkDzgrZ7_W35PJ9Stnv9bfk8n1KOdxbQAH-xIUsGnd5AOHr_L1Yh0xv4v1okEzGtGP--T&_nc_ohc=tmX5Vz-jqMwAX83hf1W&_nc_ht=scontent.fmnl34-1.fna&oh=03_AdSjsMqoAn8UEt_dp1ejgPdnuSZ2OtbuC4n811utLDZrbA&oe=64D8A909 alt="">
               </div>
             </div>
           </div>

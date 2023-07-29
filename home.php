@@ -190,7 +190,6 @@
             <div class="col-lg-7 pb-5 pb-lg-0 px-3 px-lg-5">
                 <ul class="list-inline">
                 </ul>
-                <a href="" class="btn btn-lg btn-primary mt-3 px-4">Learn More</a>
             </div>
             <div class="col-lg-5">
                 <div class="row px-3">
@@ -215,7 +214,6 @@
         <div class="container py-5">
             <div class="d-flex flex-column text-center mb-5">
                 <h4 class="text-secondary mb-3">Our Services</h4>
-                <h1 class="display-4 m-0"><span class="text-primary">Premium</span> Pet Services</h1>
             </div>
             <div class="row pb-3">
                 <div class="col-md-6 col-lg-4 mb-4">
